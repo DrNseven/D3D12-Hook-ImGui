@@ -56,12 +56,12 @@ void __stdcall hkDrawInstanced(ID3D12GraphicsCommandList *dCommandList, UINT Ver
 		InitOnce2 = false;
 	}
 
-	//screen fuqup test (elemental-demo-dx12)
+	
+	//no fog/smoke/glow test (elemental-demo-dx12)
 	const float f[4] = { 0, 0, 0, 0 };
 	dCommandList->OMSetBlendFactor(f);
 
-
-	return oDrawIndexedInstanced(dCommandList, VertexCountPerInstance, InstanceCount, StartVertexLocation, StartInstanceLocation);
+	return oDrawInstanced(dCommandList, VertexCountPerInstance, InstanceCount, StartVertexLocation, StartInstanceLocation);
 }
 
 
@@ -75,6 +75,10 @@ void __stdcall hkDrawIndexedInstanced(ID3D12GraphicsCommandList *dCommandList, U
 		InitOnce3 = false;
 	}
 
+	
+	//no fog/smoke/glow test (elemental-demo-dx12)
+	const float f[4] = { 0, 0, 0, 0 };
+	dCommandList->OMSetBlendFactor(f);
 
 	return oDrawIndexedInstanced(dCommandList, IndexCount, InstanceCount, StartIndex, BaseVertex);
 }
