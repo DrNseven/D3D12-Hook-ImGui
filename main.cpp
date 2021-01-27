@@ -10,6 +10,9 @@
 bool InitOnce = true;
 bool InitOnce2 = true;
 bool InitOnce3 = true;
+int countnum = -1;
+bool nopants_enabled = true;
+
 
 ID3D12Device *dDevice = NULL;
 ID3D12GraphicsCommandList *dCommandList = NULL;
@@ -21,7 +24,7 @@ Present12 oPresent12 = NULL;
 typedef void(__stdcall *DrawInstanced)(ID3D12GraphicsCommandList *dCommandList, UINT VertexCountPerInstance, UINT InstanceCount, UINT StartVertexLocation, UINT StartInstanceLocation);
 DrawInstanced oDrawInstanced = NULL;
 
-typedef void(__stdcall *DrawIndexedInstanced)(ID3D12GraphicsCommandList *dCommandList, UINT IndexCount, UINT InstanceCount, UINT StartIndex, INT BaseVertex);
+typedef void(__stdcall *DrawIndexedInstanced)(ID3D12GraphicsCommandList *dCommandList, UINT IndexCountPerInstance, UINT InstanceCount, UINT StartIndexLocation, INT BaseVertexLocation, UINT StartInstanceLocation);
 DrawIndexedInstanced oDrawIndexedInstanced = NULL;
 
 
@@ -58,8 +61,26 @@ void __stdcall hkDrawInstanced(ID3D12GraphicsCommandList *dCommandList, UINT Ver
 
 	
 	//no fog/smoke/glow test (elemental-demo-dx12)
-	const float f[4] = { 0, 0, 0, 0 };
-	dCommandList->OMSetBlendFactor(f);
+	//const float f[4] = { 0, 0, 0, 0 };
+	//dCommandList->OMSetBlendFactor(f);
+
+	/*
+	//hold down P key until a texture disappears, press END to log values of those textures
+	if (GetAsyncKeyState('O') & 1) //-
+		countnum--;
+	if (GetAsyncKeyState('L') & 1) //+
+		countnum++;
+	if (GetAsyncKeyState(VK_MENU) && GetAsyncKeyState('9') & 1) //reset, set to -1
+		countnum = -1;
+
+	if (countnum == VertexCountPerInstance)
+		if (GetAsyncKeyState(VK_END) & 1) //log
+			Log("VertexCountPerInstance == %d && InstanceCount == %d",
+				VertexCountPerInstance, InstanceCount);
+
+	if (countnum == VertexCountPerInstance)
+		return;
+	*/
 
 	return oDrawInstanced(dCommandList, VertexCountPerInstance, InstanceCount, StartVertexLocation, StartInstanceLocation);
 }
@@ -67,7 +88,7 @@ void __stdcall hkDrawInstanced(ID3D12GraphicsCommandList *dCommandList, UINT Ver
 
 //=========================================================================================================================//
 
-void __stdcall hkDrawIndexedInstanced(ID3D12GraphicsCommandList *dCommandList, UINT IndexCount, UINT InstanceCount, UINT StartIndex, INT BaseVertex)
+void __stdcall hkDrawIndexedInstanced(ID3D12GraphicsCommandList *dCommandList, UINT IndexCountPerInstance, UINT InstanceCount, UINT StartIndexLocation, INT BaseVertexLocation, UINT StartInstanceLocation)
 {
 	if (InitOnce3)
 	{
@@ -75,12 +96,33 @@ void __stdcall hkDrawIndexedInstanced(ID3D12GraphicsCommandList *dCommandList, U
 		InitOnce3 = false;
 	}
 
-	
-	//no fog/smoke/glow test (elemental-demo-dx12)
-	const float f[4] = { 0, 0, 0, 0 };
-	dCommandList->OMSetBlendFactor(f);
+	//cyberpunk 2077 no pants hack (low settings)
+	if(nopants_enabled)
+	if(IndexCountPerInstance == 10068|| //bargirl pants near
+		IndexCountPerInstance == 3576) //med range
+	return; //delete texture
 
-	return oDrawIndexedInstanced(dCommandList, IndexCount, InstanceCount, StartIndex, BaseVertex);
+	if (GetAsyncKeyState(VK_F12) & 1) //toggle key
+		nopants_enabled = !nopants_enabled;
+	
+
+	//logger, hold down B key until a texture disappears, press END to log values of those textures
+	if (GetAsyncKeyState('V') & 1) //-
+		countnum--;
+	if (GetAsyncKeyState('B') & 1) //+
+		countnum++;
+	if (GetAsyncKeyState(VK_MENU) && GetAsyncKeyState('9') & 1) //reset, set to -1
+		countnum = -1;
+
+	if (countnum == IndexCountPerInstance/100)
+		if (GetAsyncKeyState(VK_END) & 1) //log
+			Log("IndexCountPerInstance == %d && InstanceCount == %d",
+				IndexCountPerInstance, InstanceCount);
+
+	if (countnum == IndexCountPerInstance/100)
+		return;
+	
+	return oDrawIndexedInstanced(dCommandList, IndexCountPerInstance, InstanceCount, StartIndexLocation, BaseVertexLocation, StartInstanceLocation);
 }
 
 
