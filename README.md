@@ -5,7 +5,7 @@ d3d12 hook imgui, directx12 hook, dx12 hook, d3d12 api hook, ImGui
 
 Compiling:
 1. Download and install Microsoft Visual Studio Community: https://visualstudio.microsoft.com/downloads/
-2. opend3d12imgui.sln or d3d12imgui.vcxproj with visual studio (C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\devenv.exe)
+2. open d3d12imgui.sln or d3d12imgui.vcxproj with visual studio (C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\devenv.exe)
 3. Select Release x64 (not debug)
 4. Project -> Properties -> Configuration properties -> Advanced -> Character Set: Use Multi-Byte Character Set
 5. press CTRL+SHIFT+B to Build (creates dll)
