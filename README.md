@@ -1,6 +1,8 @@
 # D3D12-Hook with Imgui
 d3d12 hook imgui, directx12 hook, dx12 hook, d3d12 api hook, ImGui
 
+Go here for new version with Imgui overlay: https://github.com/DrNseven/D3D12-Wallhack
+
 ![alt tag](https://github.com/DrNseven/D3D12-Hook/blob/master/imgui.jpg)
 
 Compiling:
